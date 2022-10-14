@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+    <title>セトリ部</title>
+
+    <style>
+        .icon-checkable::before {
+            content: "☒";
+        }
+
+        .icon-checkable[data-checked="true"]::before {
+            content: "☑";
+        }
+
+        #songs .song[data-song]::before {
+            content: attr(data-song);
+        }
+
+        #setlist .song[data-song]::after {
+            content: attr(data-song);
+        }
+
+        .song-move-up::before {
+            content: "▲";
+        }
+
+        .song-move-down::before {
+            content: "▼";
+        }
+
+        .song-remove::before {
+            content: "✖";
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ✅❎🔲☐☑☒✔❌ -->
+    <section class="section">
+        <div class="container">
+            <div class="field" id="live-title">
+                <div class="control">
+                    <input class="input is-small" type="text" placeholder="ライブ名" />
+                </div>
+            </div>
+            <div class="field" id="live-place">
+                <div class="control">
+                    <input class="input is-small" type="text" placeholder="会場" />
+                </div>
+            </div>
+            <div class="field" id="live-date">
+                <div class="control">
+                    <input class="input is-small" type="date" placeholder="日付" data-start-date="10/24/2019">
+                </div>
+            </div>
+            <div class="columns is-mobile">
+                <div class="column is-half">
+                    <article id="setlist" class="panel is-info">
+                        <p class="panel-heading is-size-7">セットリスト</p>
+                    </article>
+                </div>
+                <div class="column is-half">
+                    <div class="field has-addons" id="custom-song">
+                        <div class="control is-expanded">
+                            <input class="input is-small" type="text" placeholder="自由書き" />
+                        </div>
+                        <div class="control">
+                            <a id="custom-song-add" class="button is-small is-info">＋</a>
+                        </div>
+                    </div>
+                    <article id="songs" class="panel is-info">
+                        <p class="panel-heading is-size-7">曲</p>
+                    </article>
+                </div>
+            </div>
+            <div class="field" id="message">
+                <div class="control">
+                    <textarea class="textarea is-small" rows="10" placeholder="メッセージ"></textarea>
+                </div>
+            </div>
+            <div class="control">
+                <button id="copy-button" class="button is-small is-primary">コピー</button>
+                <a id="tweet-button" class="button is-small is-info" href="#">ツイート</a>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const hashTags = ['萌ディス', '萌燃ディストラクション'];
+        const relatedAccounts = ['moe_destruction','nana_kumori','amina_minase','tenn_komiya','narua_ngo','renpha_hisaki'];
+        const songs = ['SE', 'MC', '_Rebirth.', 'わたしはもうきみのじゃない。', '囚われカタストロフィー', 'MU-ZE', 'Aimer', 'Rebellion', 'halu', '彼氏キミ攻略法', '戦争的可愛症候群', '世代交代、反逆の狼煙', '酒クズファック', '絶対絶命開示請求'];
+        function addSong(song) {
+            const setlistElem = document.getElementById('setlist');
+            // <a class="panel-block setlist is-size-7" data-song="曲名">
+            //     <span class="panel-icon song-move-up"></span>
+            //     <span class="panel-icon song-move-down"></span>
+            //     <span class="panel-icon song-remove"></span>
+            // </a>
+            const setlistSongElem = document.createElement('a');
+            setlistSongElem.classList.add('panel-block', 'song', 'is-size-7');
+            const moveUpElem = document.createElement('span');
+            moveUpElem.classList.add('panel-icon', 'song-move-up');
+            moveUpElem.addEventListener('click', (evt) => {
+                console.log('上に移動', evt.target.parentNode.dataset.song);
+                const thisSongElem = evt.target.parentNode;
+                const parentElem = thisSongElem.parentNode;
+                const prevSongElem = thisSongElem.previousElementSibling;
+                if (prevSongElem && prevSongElem.classList.contains('song')) {
+                    parentElem.insertBefore(thisSongElem, prevSongElem);
+                }
+                generateMessage();
+            });
+            const moveDownElem = document.createElement('span');
+            moveDownElem.classList.add('panel-icon', 'song-move-down');
+            moveDownElem.addEventListener('click', (evt) => {
+                console.log('下に移動', evt.target.parentNode.dataset.song);
+                const thisSongElem = evt.target.parentNode;
+                const parentElem = thisSongElem.parentNode;
+                const nextSongElem = thisSongElem.nextElementSibling;
+                if (nextSongElem && nextSongElem.classList.contains('song')) {
+                    parentElem.insertBefore(nextSongElem, thisSongElem);
+                }
+                generateMessage();
+            });
+            const removeElem = document.createElement('span');
+            removeElem.addEventListener('click', (evt) => {
+                console.log('セトリから削除', evt.target.parentNode.dataset.song);
+                evt.target.parentNode.parentNode.removeChild(evt.target.parentNode);
+                generateMessage();
+            });
+            removeElem.classList.add('panel-icon', 'song-remove');
+            setlistSongElem.appendChild(moveUpElem);
+            setlistSongElem.appendChild(moveDownElem);
+            setlistSongElem.appendChild(removeElem);
+            setlistSongElem.dataset.song = song;
+            setlistElem.appendChild(setlistSongElem);
+            generateMessage();
+        }
+        function renderSongs() {
+            const songsElem = document.getElementById('songs');
+            for (const song of songs) {
+                // <a class="panel-block song is-size-7" data-song="曲名"></a>
+                const songElem = document.createElement('a');
+                songElem.classList.add('panel-block', 'song', 'is-size-7');
+                songElem.dataset.song = song;
+                songElem.addEventListener('click', (evt) => {
+                    addSong(song);
+                });
+                songsElem.appendChild(songElem);
+            }
+        }
+        function generateMessage() {
+            const title = document.getElementById('live-title').getElementsByTagName('input').item(0).value;
+            const place = document.getElementById('live-place').getElementsByTagName('input').item(0).value;
+            const dateStr = document.getElementById('live-date').getElementsByTagName('input').item(0).value;
+            const setlist = [];
+            for (const elem of document.querySelectorAll('#setlist .song')) {
+                if (elem.dataset.song) {
+                    setlist.push(elem.dataset.song);
+                }
+            }
+            const setlistStr = Array.isArray(setlist) ? setlist.join('\n') : '';
+            const hashTagsStr = hashTags.map(ht => '#' + ht).join('\n');
+            const messageTweet = `${dateStr ? dateStr + '\n' : ''}${title ? title + '\n' : ''}${place ? '@ ' + place + '\n' : ''}${setlistStr ? '\n' + setlistStr + '\n\n' : ''}`;
+            const messageTextarea = `${dateStr ? dateStr + '\n' : ''}${title ? title + '\n' : ''}${place ? '@ ' + place + '\n' : ''}${setlistStr ? '\n' + setlistStr + '\n' : ''}${hashTagsStr ? '\n' + hashTagsStr : ''}`;
+            document.getElementById('message').getElementsByTagName('textarea').item(0).value = messageTextarea;
+            const tweetButton = document.getElementById('tweet-button');
+            tweetButton.href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(messageTweet) + '&hashtags=' + encodeURIComponent(hashTags.join(',')) + '&related=' + encodeURIComponent(relatedAccounts.join(','));
+        }
+        function load() {
+            document.getElementById('live-date').getElementsByTagName('input').item(0).valueAsDate = new Date();
+            document.getElementById('copy-button').addEventListener('click', (evt) => {
+                document.querySelector('#message .textarea').select();
+                document.execCommand('copy');
+                window.alert('クリップボードにコピーしました');
+            });
+            document.getElementById('custom-song-add').addEventListener('click', (evt) => {
+                const song = document.querySelector('#custom-song input').value;
+                if (song) {
+                    addSong(song);
+                }
+            });
+            renderSongs();
+            addSong('SE');
+            generateMessage();
+            for (const elem of document.querySelectorAll('input')) {
+                elem.addEventListener('change', (evt) => {
+                    generateMessage();
+                });
+            }
+        }
+        addEventListener('DOMContentLoaded', load);
+    </script>
+</body>
+
+</html>
