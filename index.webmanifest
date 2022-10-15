@@ -1,0 +1,40 @@
+{
+    "background_color": "lightskyblue",
+    "description": "萌燃𖤐ディストラクションのセトリ部ツイート支援ツール",
+    "display": "fullscreen",
+    "icons": [
+        {
+            "src": "md_400x400.jpg",
+            "sizes": "400x400",
+            "type": "image/jpeg"
+        },
+        {
+            "src": "kn_400x400.jpg",
+            "sizes": "400x400",
+            "type": "image/jpeg"
+        },
+        {
+            "src": "ma_400x400.jpg",
+            "sizes": "400x400",
+            "type": "image/jpeg"
+        },
+        {
+            "src": "nn_400x400.jpg",
+            "sizes": "400x400",
+            "type": "image/jpeg"
+        },
+        {
+            "src": "kt_400x400.jpg",
+            "sizes": "400x400",
+            "type": "image/jpeg"
+        },
+        {
+            "src": "hr_400x400.jpg",
+            "sizes": "400x400",
+            "type": "image/jpeg"
+        }
+    ],
+    "name": "萌ディスセトリ",
+    "short_name": "萌ディスセトリ",
+    "start_url": "/index.html"
+}
