@@ -34,29 +34,35 @@
 
 <body>
     <!-- ✅❎🔲☐☑☒✔❌ -->
-    <section class="section">
+    <section class="section p-2">
         <div class="container">
-            <div class="field" id="live-title">
+            <div class="field mb-1" id="live-title">
                 <div class="control">
                     <input class="input is-small" type="text" placeholder="ライブ名" />
                 </div>
             </div>
-            <div class="field" id="live-place">
-                <div class="control">
-                    <input class="input is-small" type="text" placeholder="会場" />
-                </div>
-            </div>
-            <div class="field" id="live-date">
-                <div class="control">
-                    <input class="input is-small" type="date" placeholder="日付" data-start-date="10/24/2019">
-                </div>
-            </div>
-            <div class="columns is-mobile">
+            <div class="columns is-mobile is-variable is-1 mb-0">
                 <div class="column is-half">
-                    <article id="setlist" class="panel is-info">
+                    <div class="field" id="live-place">
+                        <div class="control">
+                            <input class="input is-small" type="text" placeholder="会場" />
+                        </div>
+                    </div>
+                </div>
+                <div class="column is-half">
+                    <div class="field" id="live-date">
+                        <div class="control">
+                            <input class="input is-small" type="date" placeholder="日付" data-start-date="10/24/2019">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="columns is-mobile is-variable is-1 mb-0">
+                <div class="column is-half">
+                    <article id="setlist" class="panel is-info mb-1">
                         <p class="panel-heading is-size-7">セットリスト</p>
                     </article>
-                    <div class="field has-addons" id="custom-song">
+                    <div id="custom-song" class="field has-addons mb-1">
                         <div class="control is-expanded">
                             <input class="input is-small" type="text" placeholder="自由書き" />
                         </div>
@@ -71,12 +77,12 @@
                     </article>
                 </div>
             </div>
-            <div class="field" id="message">
+            <div class="field mb-1" id="message">
                 <div class="control">
                     <textarea class="textarea is-small" rows="10" placeholder="メッセージ"></textarea>
                 </div>
             </div>
-            <div class="buttons">
+            <div class="buttons mb-1">
                 <button id="copy-button" class="button is-small is-primary">コピー</button>
                 <a id="tweet-button" class="button is-small is-info" href="#">ツイート</a>
                 <button id="clear-button" class="button is-small is-danger is-outlined is-right">リセット</button>
