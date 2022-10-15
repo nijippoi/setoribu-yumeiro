@@ -172,11 +172,11 @@
             setlist && setlist.length > 0 ? localStorage.setItem('setlist', JSON.stringify(setlist)) : localStorage.removeItem('setlist');
             const setlistStr = Array.isArray(setlist) ? setlist.join('\n') : '';
             const hashTagsStr = hashTags.map(ht => '#' + ht).join('\n');
-            const messageTweet = `${dateStr ? dateStr + '\n' : ''}${title ? title + '\n' : ''}${place ? '@ ' + place + '\n' : ''}${setlistStr ? '\n' + setlistStr + '\n\n' : ''}`;
             const messageTextarea = `${dateStr ? dateStr + '\n' : ''}${title ? title + '\n' : ''}${place ? '@ ' + place + '\n' : ''}${setlistStr ? '\n' + setlistStr + '\n' : ''}${hashTagsStr ? '\n' + hashTagsStr : ''}`;
             document.getElementById('message').getElementsByTagName('textarea').item(0).value = messageTextarea;
             const tweetButton = document.getElementById('tweet-button');
-            tweetButton.href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(messageTweet) + '&hashtags=' + encodeURIComponent(hashTags.join(',')) + '&related=' + encodeURIComponent(relatedAccounts.join(','));
+            const twitterIntentUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(messageTextarea) + '&related=' + encodeURIComponent(relatedAccounts.join(','));
+            tweetButton.href = twitterIntentUrl;
         }
         function load() {
             // 入力値を復活
