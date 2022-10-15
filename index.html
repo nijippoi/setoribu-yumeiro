@@ -173,7 +173,12 @@
             tweetButton.href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(messageTweet) + '&hashtags=' + encodeURIComponent(hashTags.join(',')) + '&related=' + encodeURIComponent(relatedAccounts.join(','));
         }
         function load() {
+            // データを初期化
             document.getElementById('live-date').getElementsByTagName('input').item(0).valueAsDate = new Date();
+            renderSongs();
+            addSong('SE');
+            generateMessage();
+            // リスナーを追加
             document.getElementById('copy-button').addEventListener('click', (evt) => {
                 document.querySelector('#message .textarea').select();
                 document.execCommand('copy');
@@ -185,9 +190,6 @@
                     addSong(song);
                 }
             });
-            renderSongs();
-            addSong('SE');
-            generateMessage();
             for (const elem of document.querySelectorAll('input')) {
                 elem.addEventListener('change', (evt) => {
                     generateMessage();
