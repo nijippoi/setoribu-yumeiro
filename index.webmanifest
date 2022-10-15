@@ -36,5 +36,5 @@
     ],
     "name": "萌ディスセトリ",
     "short_name": "萌ディスセトリ",
-    "start_url": "index.html"
+    "start_url": "./index.html"
 }
