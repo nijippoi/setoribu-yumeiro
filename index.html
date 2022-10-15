@@ -192,6 +192,9 @@
                 elem.addEventListener('change', (evt) => {
                     generateMessage();
                 });
+                elem.addEventListener('input', (evt) => {
+                    generateMessage();
+                });
             }
         }
         addEventListener('DOMContentLoaded', load);
