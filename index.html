@@ -18,12 +18,8 @@
             content: attr(data-song);
         }
 
-        .song-move-up::before {
-            content: "▲";
-        }
-
-        .song-move-down::before {
-            content: "▼";
+        .song[data-moving] {
+            background-color: #afafaf !important;
         }
 
         .song-remove::before {
@@ -94,50 +90,76 @@
         const hashTags = ['萌ディス', '萌燃ディストラクション', '萌ディスセトリ'];
         const relatedAccounts = ['moe_destruction', 'nana_kumori', 'amina_minase', 'tenn_komiya', 'narua_ngo', 'renpha_hisaki'];
         const songs = ['SE', 'MC', '_Rebirth.', 'わたしはもうきみのじゃない。', '囚われカタストロフィー', 'C.A.R', 'MU-ZE', 'NEVER STAY', '\'aimer', '彼氏キミ攻略法', 'すたーとあっぷ☆しぐなる', '戦争的可愛症候群', '世代交代、反逆の狼煙', '☆酒クズファーーック☆', '絶対絶命、開示請求', 'Rebellion', 'HALU'];
+        function songDragStart(evt) {
+            // ✖などの内部要素の場合は無視したいので
+            if (evt.srcElement.classList.contains('song')) {
+                evt.preventDefault();
+                const songElem = evt.srcElement;
+                songElem.setAttribute('data-moving', 'true');
+                songElem.addEventListener('touchmove', songDrag);
+                songElem.addEventListener('touchend', songDragStop);
+                document.body.addEventListener('mousemove', songDrag);
+                document.body.addEventListener('mouseup', songDragStop);
+                document.body.addEventListener('mouseleave', songDragStop);
+                document.body.addEventListener('touchleave', songDragStop);
+            }
+        }
+        function songDrag(evt) {
+            const songElem = document.querySelector('#setlist .song[data-moving]');
+            if (songElem) {
+                const songElemTop = songElem.getBoundingClientRect().top;
+                const songElemBottom = songElem.getBoundingClientRect().bottom;
+                const y = evt.type === 'mousemove' ? evt.pageY : evt.changedTouches[0].pageY;
+                if (y < songElemTop && songElem.previousElementSibling && songElem.previousElementSibling.classList.contains('song')) {
+                    // 上に移動
+                    songElem.parentNode.insertBefore(songElem, songElem.previousElementSibling);
+                    generateMessage();
+                } else if (y > songElemBottom && songElem.nextElementSibling && songElem.nextElementSibling.classList.contains('song')) {
+                    // 下に移動
+                    songElem.parentNode.insertBefore(songElem.nextElementSibling, songElem);
+                    generateMessage();
+                }
+            } else {
+                evt.srcElement.removeEventListener('touchmove', songDrag);
+                document.body.removeEventListener('mousemove', songDrag);
+                document.body.removeEventListener('mouseup', songDragStop);
+                document.body.removeEventListener('mouseleave', songDragStop);
+                document.body.removeEventListener('touchleave', songDragStop);
+                return;
+            }
+        }
+        function songDragStop(evt) {
+            for (const movingElem of document.querySelectorAll('#setlist .song[data-moving]')) {
+                movingElem.removeAttribute('data-moving');
+            }
+            evt.srcElement.removeEventListener('touchmove', songDrag);
+            evt.srcElement.removeEventListener('touchend', songDragStop);
+            document.body.removeEventListener('mousemove', songDrag);
+            document.body.removeEventListener('mouseup', songDragStop);
+            document.body.removeEventListener('mouseleave', songDragStop);
+            document.body.removeEventListener('touchleave', songDragStop);
+        }
         function addSong(song) {
+            const removeElem = document.createElement('span');
+            removeElem.classList.add('panel-icon', 'song-remove');
+            removeElem.addEventListener('click', (evt) => {
+                console.log('セトリから削除', evt.target.parentNode.dataset.song);
+                evt.target.parentNode.parentNode.removeChild(evt.target.parentNode);
+                generateMessage();
+            }, true);
+            const setlistSongElem = document.createElement('a');
+            setlistSongElem.classList.add('panel-block', 'song', 'is-size-7');
+            setlistSongElem.appendChild(removeElem);
+            setlistSongElem.dataset.song = song;
+            setlistSongElem.addEventListener('mousedown', songDragStart);
+            setlistSongElem.addEventListener('touchstart', songDragStart);
+            // セットリストを作成
             const setlistElem = document.getElementById('setlist');
             // <a class="panel-block setlist is-size-7" data-song="曲名">
             //     <span class="panel-icon song-move-up"></span>
             //     <span class="panel-icon song-move-down"></span>
             //     <span class="panel-icon song-remove"></span>
             // </a>
-            const setlistSongElem = document.createElement('a');
-            setlistSongElem.classList.add('panel-block', 'song', 'is-size-7');
-            const moveUpElem = document.createElement('span');
-            moveUpElem.classList.add('panel-icon', 'song-move-up');
-            moveUpElem.addEventListener('click', (evt) => {
-                console.log('上に移動', evt.target.parentNode.dataset.song);
-                const thisSongElem = evt.target.parentNode;
-                const parentElem = thisSongElem.parentNode;
-                const prevSongElem = thisSongElem.previousElementSibling;
-                if (prevSongElem && prevSongElem.classList.contains('song')) {
-                    parentElem.insertBefore(thisSongElem, prevSongElem);
-                }
-                generateMessage();
-            });
-            const moveDownElem = document.createElement('span');
-            moveDownElem.classList.add('panel-icon', 'song-move-down');
-            moveDownElem.addEventListener('click', (evt) => {
-                console.log('下に移動', evt.target.parentNode.dataset.song);
-                const thisSongElem = evt.target.parentNode;
-                const parentElem = thisSongElem.parentNode;
-                const nextSongElem = thisSongElem.nextElementSibling;
-                if (nextSongElem && nextSongElem.classList.contains('song')) {
-                    parentElem.insertBefore(nextSongElem, thisSongElem);
-                }
-                generateMessage();
-            });
-            const removeElem = document.createElement('span');
-            removeElem.addEventListener('click', (evt) => {
-                console.log('セトリから削除', evt.target.parentNode.dataset.song);
-                evt.target.parentNode.parentNode.removeChild(evt.target.parentNode);
-                generateMessage();
-            });
-            removeElem.classList.add('panel-icon', 'song-remove');
-            setlistSongElem.appendChild(moveUpElem);
-            setlistSongElem.appendChild(moveDownElem);
-            setlistSongElem.appendChild(removeElem);
-            setlistSongElem.dataset.song = song;
             setlistElem.appendChild(setlistSongElem);
             generateMessage();
         }
