@@ -193,7 +193,7 @@
             setlist && setlist.length > 0 ? localStorage.setItem('setlist', JSON.stringify(setlist)) : localStorage.removeItem('setlist');
             const setlistStr = Array.isArray(setlist) ? setlist.join('\n') : '';
             const hashTagsStr = hashTags.map(ht => '#' + ht).join('\n');
-            const messageTextarea = `${dateStr ? dateStr + '\n' : ''}${title ? title + '\n' : ''}${place ? '@ ' + place + '\n' : ''}${setlistStr ? '\n' + setlistStr + '\n' : ''}@moe_destruction${hashTagsStr ? '\n' + hashTagsStr : ''}`;
+            const messageTextarea = `${dateStr ? dateStr + '\n' : ''}${title ? title + '\n' : ''}${place ? '@ ' + place + '\n' : ''}${setlistStr ? '\n' + setlistStr + '\n' : ''}\n@moe_destruction${hashTagsStr ? '\n' + hashTagsStr : ''}`;
             document.getElementById('message').getElementsByTagName('textarea').item(0).value = messageTextarea;
             const tweetButton = document.getElementById('tweet-button');
             const twitterIntentUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(messageTextarea) + '&related=' + encodeURIComponent(relatedAccounts.join(','));
