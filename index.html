@@ -88,7 +88,7 @@
     <script>
         const hashTags = ['萌ディス', '萌燃ディストラクション', '萌ディスセトリ'];
         const relatedAccounts = ['moe_destruction', 'nana_kumori', 'amina_minase', 'tenn_komiya', 'narua_ngo', 'renpha_hisaki'];
-        const songs = ['SE', 'MC', '_Rebirth.', 'わたしはもうきみのじゃない。', '囚われカタストロフィー', 'C.A.R', 'MU-ZE', 'NEVER STAY', '\'aimer', '彼氏キミ攻略法', 'すたーとあっぷ☆しぐなる', '戦争的可愛症候群', '世代交代、反逆の狼煙', '☆酒クズファーーック☆', '絶対絶命、開示請求', 'Rebellion', 'HALU'];
+        const songs = ['SE', 'MC', '_Rebirth.', 'わたしはもうきみのじゃない。', '囚われカタストロフィー', 'C.A.R', 'MU-ZE', 'NEVER STAY', '\'aimer', '彼氏キミ攻略法', 'すたーとあっぷ☆しぐなる', '戦争的可愛症候群', '世代交代、反逆の狼煙', '☆酒クズファーーック☆', '絶対絶命、開示請求', '炎上着火ファイヤー', 'Rebellion', 'HALU'];
         function songDragStart(evt) {
             // ✖などの内部要素の場合は無視したいので
             if (evt.srcElement.classList.contains('song')) {
@@ -193,7 +193,7 @@
             setlist && setlist.length > 0 ? localStorage.setItem('setlist', JSON.stringify(setlist)) : localStorage.removeItem('setlist');
             const setlistStr = Array.isArray(setlist) ? setlist.join('\n') : '';
             const hashTagsStr = hashTags.map(ht => '#' + ht).join('\n');
-            const messageTextarea = `${dateStr ? dateStr + '\n' : ''}${title ? title + '\n' : ''}${place ? '@ ' + place + '\n' : ''}${setlistStr ? '\n' + setlistStr + '\n' : ''}${hashTagsStr ? '\n' + hashTagsStr : ''}`;
+            const messageTextarea = `${dateStr ? dateStr + '\n' : ''}${title ? title + '\n' : ''}${place ? '@ ' + place + '\n' : ''}${setlistStr ? '\n' + setlistStr + '\n' : ''}@moe_destruction${hashTagsStr ? '\n' + hashTagsStr : ''}`;
             document.getElementById('message').getElementsByTagName('textarea').item(0).value = messageTextarea;
             const tweetButton = document.getElementById('tweet-button');
             const twitterIntentUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(messageTextarea) + '&related=' + encodeURIComponent(relatedAccounts.join(','));
