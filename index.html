@@ -18,12 +18,41 @@
             content: attr(data-song);
         }
 
+        #live-place {
+            display: block;
+        }
+
+        #live-place .control .icon {
+            pointer-events: initial
+        }
+
+        #live-place .dropdown-menu {
+            width: 100%;
+        }
+
+        #live-place .dropdown-content {
+            max-height: 24rem;
+            overflow: auto;
+        }
+
         .song[data-moving] {
             background-color: #afafaf !important;
         }
 
         .song-remove::before {
             content: "✖";
+        }
+
+        .icon-plus::before {
+            content: "＋";
+        }
+
+        .icon-down::before {
+            content: "▼";
+        }
+
+        .icon-up::before {
+            content: "▲";
         }
     </style>
 </head>
@@ -33,21 +62,25 @@
         <div class="container">
             <div class="field mb-1" id="live-title">
                 <div class="control">
-                    <input class="input is-small" type="text" placeholder="ライブ名" />
+                    <input id="live-title-input" class="input is-small" type="text" placeholder="ライブ名" />
                 </div>
             </div>
             <div class="columns is-mobile is-variable is-1 mb-0">
                 <div class="column is-half">
-                    <div class="field" id="live-place">
-                        <div class="control">
-                            <input class="input is-small" type="text" placeholder="会場" />
+                    <div class="field dropdown" id="live-place">
+                        <div class="control dropdown-trigger is-expanded has-icons-right">
+                            <input id="live-place-input" class="input is-small" type="text" placeholder="会場" />
+                            <a class="icon is-small is-right is-info icon-down" id="live-place-list-button"></a>
+                        </div>
+                        <div class="dropdown-menu" role="menu">
+                            <div class="dropdown-content" id="live-place-list"></div>
                         </div>
                     </div>
                 </div>
                 <div class="column is-half">
                     <div class="field" id="live-date">
                         <div class="control">
-                            <input class="input is-small" type="date" placeholder="日付" data-start-date="10/24/2019">
+                            <input id="live-date-input" class="input is-small" type="date" placeholder="日付">
                         </div>
                     </div>
                 </div>
@@ -59,10 +92,10 @@
                     </article>
                     <div id="custom-song" class="field has-addons mb-1">
                         <div class="control is-expanded">
-                            <input class="input is-small" type="text" placeholder="自由書き" />
+                            <input id="custom-song-input" class="input is-small" type="text" placeholder="自由書き" />
                         </div>
                         <div class="control">
-                            <a id="custom-song-add" class="button is-small is-info">＋</a>
+                            <a id="custom-song-add" class="button is-small is-info icon-plus"></a>
                         </div>
                     </div>
                 </div>
@@ -74,7 +107,7 @@
             </div>
             <div class="field mb-1" id="message">
                 <div class="control">
-                    <textarea class="textarea is-small" rows="10" placeholder="メッセージ"></textarea>
+                    <textarea id="message-input" class="textarea is-small" rows="10" placeholder="メッセージ"></textarea>
                 </div>
             </div>
             <div class="buttons mb-1">
@@ -88,7 +121,77 @@
     <script>
         const hashTags = ['萌ディス', '萌燃ディストラクション', '萌ディスセトリ'];
         const relatedAccounts = ['moe_destruction', 'nana_kumori', 'amina_minase', 'tenn_komiya', 'narua_ngo', 'renpha_hisaki'];
-        const songs = ['SE', 'MC', '_Rebirth.', 'わたしはもうきみのじゃない。', '囚われカタストロフィー', 'C.A.R', 'MU-ZE', 'NEVER STAY', '\'aimer', '彼氏キミ攻略法', 'すたーとあっぷ☆しぐなる', '戦争的可愛症候群', '世代交代、反逆の狼煙', '☆酒クズファーーック☆', '絶対絶命、開示請求', '炎上着火ファイヤー', 'Rebellion', 'HALU'];
+        const songs = [
+            'SE',
+            'MC',
+            '_Rebirth.',
+            'わたしはもうきみのじゃない。',
+            '囚われカタストロフィー',
+            'C.A.R',
+            'MU-ZE',
+            'NEVER STAY',
+            '\'aimer',
+            '彼氏キミ攻略法',
+            'すたーとあっぷ☆しぐなる',
+            '戦争的可愛症候群',
+            '世代交代、反逆の狼煙',
+            '☆酒クズファーーック☆',
+            '絶対絶命、開示請求',
+            '炎上着火ファイヤー',
+            'Rebellion',
+            'HALU',
+        ];
+        const places = [
+            // 秋葉原
+            'AKIBA COLORS',
+            'TwinBox AKIHABARA',
+            'TwinBox GARAGE',
+            // 新宿
+            '新宿WALLY',
+            '新宿ロフト',
+            '新宿club SCIENCE',
+            'HOLIDAY SHINJUKU',
+            '新宿FATE',
+            '新宿ReNY',
+            '新宿MARZ',
+            '新宿BLAZE',
+            'Shinjuku HEIST',
+            'バトゥール東京',
+            // 渋谷
+            '渋谷REX',
+            '渋谷チェルシーホテル',
+            '渋谷Club MALCOLM',
+            'shibuya Milkyway',
+            '渋谷Club Quattro',
+            'GARRET udagawa',
+            'shibuya CYCLONE',
+            'TSUTAYA O-EAST',
+            'TSUTAYA O-WEST',
+            'TSUTAYA O-Crest',
+            'TSUTAYA O-nest',
+            '渋谷La.mama',
+            '渋谷clubasia',
+            '渋谷SPACE ODD',
+            '渋谷WOMB TOKYO',
+            '渋谷CLUB CRAWL',
+            '渋谷ATOM TOKYO',
+            'SHIBUYA DESEO',
+            'SHIBUYA DESEOmini',
+            'aube shibuya',
+            // 池袋
+            '池袋BlackHole',
+            'EDGE Ikebukuro',
+            // その他
+            '大塚Deepa',
+            '大塚Hearts+',
+            '大塚Hearts Next',
+            '目黒鹿鳴館',
+            '下北沢ロフト',
+            '下北沢シャングリラ',
+            '下北沢Flowers Loft',
+            '恵比寿CreAto',
+            '恵比寿LIQUIDROOM',
+        ];
         function songDragStart(evt) {
             // ✖などの内部要素の場合は無視したいので
             if (evt.srcElement.classList.contains('song')) {
@@ -142,7 +245,6 @@
             const removeElem = document.createElement('span');
             removeElem.classList.add('panel-icon', 'song-remove');
             removeElem.addEventListener('click', (evt) => {
-                console.log('セトリから削除', evt.target.parentNode.dataset.song);
                 evt.target.parentNode.parentNode.removeChild(evt.target.parentNode);
                 generateMessage();
             }, true);
@@ -177,13 +279,13 @@
         }
         function generateMessage() {
             // 入力値を保存
-            document.getElementById('live-title').getElementsByTagName('input').item(0).value ? localStorage.setItem('live-title', document.getElementById('live-title').getElementsByTagName('input').item(0).value) : localStorage.removeItem('live-title');
-            document.getElementById('live-place').getElementsByTagName('input').item(0).value ? localStorage.setItem('live-place', document.getElementById('live-place').getElementsByTagName('input').item(0).value) : localStorage.removeItem('live-place');
-            document.getElementById('live-date').getElementsByTagName('input').item(0).value ? localStorage.setItem('live-date', document.getElementById('live-date').getElementsByTagName('input').item(0).value) : localStorage.removeItem('live-date');
+            document.getElementById('live-title-input').value ? localStorage.setItem('live-title', document.getElementById('live-title-input').value) : localStorage.removeItem('live-title');
+            document.getElementById('live-place-input').value ? localStorage.setItem('live-place', document.getElementById('live-place-input').value) : localStorage.removeItem('live-place');
+            document.getElementById('live-date-input').value ? localStorage.setItem('live-date', document.getElementById('live-date-input').value) : localStorage.removeItem('live-date');
             // メッセージを生成
-            const title = document.getElementById('live-title').getElementsByTagName('input').item(0).value;
-            const place = document.getElementById('live-place').getElementsByTagName('input').item(0).value;
-            const dateStr = document.getElementById('live-date').getElementsByTagName('input').item(0).value ? new Intl.DateTimeFormat('ja-JP').format(document.getElementById('live-date').getElementsByTagName('input').item(0).valueAsDate) : '';
+            const title = document.getElementById('live-title-input').value;
+            const place = document.getElementById('live-place-input').value;
+            const dateStr = document.getElementById('live-date-input').value ? new Intl.DateTimeFormat('ja-JP').format(document.getElementById('live-date-input').valueAsDate) : '';
             const setlist = [];
             for (const elem of document.querySelectorAll('#setlist .song')) {
                 if (elem.dataset.song) {
@@ -194,7 +296,7 @@
             const setlistStr = Array.isArray(setlist) ? setlist.join('\n') : '';
             const hashTagsStr = hashTags.map(ht => '#' + ht).join('\n');
             const messageTextarea = `${dateStr ? dateStr + '\n' : ''}${title ? title + '\n' : ''}${place ? '@ ' + place + '\n' : ''}${setlistStr ? '\n' + setlistStr + '\n' : ''}\n@moe_destruction${hashTagsStr ? '\n' + hashTagsStr : ''}`;
-            document.getElementById('message').getElementsByTagName('textarea').item(0).value = messageTextarea;
+            document.getElementById('message-input').value = messageTextarea;
             const tweetButton = document.getElementById('tweet-button');
             const twitterIntentUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(messageTextarea) + '&related=' + encodeURIComponent(relatedAccounts.join(','));
             tweetButton.href = twitterIntentUrl;
@@ -202,13 +304,13 @@
         function load() {
             // 入力値を復活
             if (localStorage.getItem('live-title')) {
-                document.getElementById('live-title').getElementsByTagName('input').item(0).value = localStorage.getItem('live-title');
+                document.getElementById('live-title-input').value = localStorage.getItem('live-title');
             }
             if (localStorage.getItem('live-place')) {
-                document.getElementById('live-place').getElementsByTagName('input').item(0).value = localStorage.getItem('live-place');
+                document.getElementById('live-place-input').value = localStorage.getItem('live-place');
             }
             if (localStorage.getItem('live-date')) {
-                document.getElementById('live-date').getElementsByTagName('input').item(0).value = localStorage.getItem('live-date');
+                document.getElementById('live-date-input').value = localStorage.getItem('live-date');
             }
             if (localStorage.getItem('setlist')) {
                 const setlist = JSON.parse(localStorage.getItem('setlist'));
@@ -217,11 +319,26 @@
                 }
             }
             // 初期化
-            if (!document.getElementById('live-date').getElementsByTagName('input').item(0).value) {
-                document.getElementById('live-date').getElementsByTagName('input').item(0).valueAsDate = new Date();
+            const placeListElem = document.getElementById('live-place-list')
+            for (const place of places) {
+                // <a href="#" class="dropdown-item is-small">AKIBA COLORS</a>
+                const placeItem = document.createElement('a');
+                placeItem.classList.add('dropdown-item', 'is-small');
+                placeItem.dataset.place = place;
+                placeItem.textContent = place;
+                placeItem.addEventListener('click', (evt) => {
+                    document.getElementById('live-place-input').value = evt.srcElement.dataset.place;
+                    document.getElementById('live-place').classList.remove('is-active');
+                    generateMessage();
+                });
+                placeListElem.appendChild(placeItem);
+            }
+            if (!document.getElementById('live-date-input').value) {
+                document.getElementById('live-date-input').valueAsDate = new Date();
             }
             renderSongs();
-            if (!document.querySelectorAll('#setlist .song') || document.querySelectorAll('#setlist .song').length < 1) {
+            const setlistSongs = document.querySelectorAll('#setlist .song');
+            if (!setlistSongs || setlistSongs.length < 1) {
                 addSong('SE');
             }
             generateMessage();
@@ -232,20 +349,34 @@
                 window.alert('クリップボードにコピーしました');
             });
             document.getElementById('clear-button').addEventListener('click', (evt) => {
-                document.getElementById('live-title').getElementsByTagName('input').item(0).value = null;
-                document.getElementById('live-place').getElementsByTagName('input').item(0).value = null;
-                document.getElementById('live-date').getElementsByTagName('input').item(0).valueAsDate = new Date();
+                document.getElementById('live-title-input').value = null;
+                document.getElementById('live-place-input').value = null;
+                document.getElementById('live-date-input').valueAsDate = new Date();
                 const setlistElem = document.getElementById('setlist');
                 for (const songElem of setlistElem.querySelectorAll('.song')) {
                     setlistElem.removeChild(songElem);
                 }
                 addSong('SE');
-                generateMessage();
+            });
+            document.getElementById('live-place-list-button').addEventListener('click', (evt) => {
+                if (document.getElementById('live-place').classList.contains('is-active')) {
+                    document.getElementById('live-place').classList.remove('is-active');
+                } else {
+                    document.getElementById('live-place').classList.add('is-active');
+                    document.getElementById('live-place-input').focus();
+                }
+            });
+            window.addEventListener('click', (evt) => {
+                const livePlaceElem = document.getElementById('live-place');
+                if (livePlaceElem.classList.contains('is-active') && !livePlaceElem.contains(evt.srcElement)) {
+                    livePlaceElem.classList.remove('is-active');
+                }
             });
             document.getElementById('custom-song-add').addEventListener('click', (evt) => {
-                const song = document.querySelector('#custom-song input').value;
-                if (song) {
-                    addSong(song);
+                const customSongElem = document.getElementById('custom-song-input');
+                if (customSongElem.value) {
+                    addSong(customSongElem.value);
+                    customSongElem.value = null;
                 }
             });
             for (const elem of document.querySelectorAll('input')) {
@@ -257,7 +388,7 @@
                 });
             }
         }
-        addEventListener('DOMContentLoaded', load);
+        document.addEventListener('DOMContentLoaded', load);
     </script>
 </body>
 
