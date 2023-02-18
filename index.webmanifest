@@ -1,8 +1,18 @@
 {
-    "background_color": "lightskyblue",
+    "name": "萌ディスセトリ部",
+    "short_name": "萌ディスセトリ部",
     "description": "萌燃𖤐ディストラクションのセトリ部ツイート支援ツール",
+    "start_url": "index.html",
+    "background_color": "#FFFFFF",
+    "theme_color": "#3E8ED0",
     "display": "fullscreen",
     "icons": [
+        {
+            "purpose": "any maskable",
+            "src": "favicon_512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        },
         {
             "src": "favicon_180x180.png",
             "sizes": "180x180",
@@ -22,9 +32,16 @@
             "src": "favicon_32x32.png",
             "sizes": "32x32",
             "type": "image/png"
+        },
+        {
+            "src": "splash_1200x1920.png",
+            "sizes": "1200x1920",
+            "type": "image/png"
+        },
+        {
+            "src": "splash_512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
         }
-    ],
-    "name": "萌ディスセトリ",
-    "short_name": "萌ディスセトリ",
-    "start_url": "/setoribu-md/index.html"
+    ]
 }
