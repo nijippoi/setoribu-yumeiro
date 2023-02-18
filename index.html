@@ -11,6 +11,121 @@
     <title>萌ディスセトリ</title>
 
     <style>
+        /*** bulmaの上書き ***/
+
+        html {
+            color-scheme: light;
+        }
+
+        :root {
+            --light-text-rgb: 0, 0, 0;
+            --light-text: rgb(var(--light-text-rgb));
+            --light-text-2: #363636;
+            --light-bg: #fff;
+            --light-link: hsl(221, 53.1%, 53.1%);
+            /* #485fc7 */
+            --light-primary: var(--light-link);
+            --light-primary-border: var(--light-link);
+
+            --dark-text-rgb: 255, 255, 255;
+            --dark-text: rgb(var(--dark-text-rgb));
+            --dark-text-2-rgb: 160, 160, 160;
+            --dark-text-2: rgb(var(--dark-text-2-rgb));
+
+            --dark-bg-rgb: 31, 36, 36;
+            --dark-bg: rgb(var(--dark-bg-rgb));
+            --dark-bg-2-rgb: 46, 48, 48;
+            --dark-bg-2: rgb(var(--dark-bg-2-rgb));
+            --dark-border-rgb: 94, 109, 111;
+            --dark-border: rgb(var(--dark-border-rgb));
+            --dark-box-shadow: 0 0.5em 1em -0.125em rgb(94 109 111 / 90%), 0 0 0 1px rgb(94 109 111 / 98%);
+
+            --dark-link-h: 221;
+            --dark-link-s: 90%;
+            --dark-link-l: 70%;
+            --dark-link: hsl(var(--dark-link-h), var(--dark-link-s), var(--dark-link-l));
+
+            /* --dark-primary: hsl(var(--dark-link-h), var(--dark-link-s), calc(var(--dark-link-l) / .9)); */
+            /* --dark-primary-border: hsl(var(--dark-link-h), calc(var(--dark-link-s) * .8), calc(var(--dark-link-l) * .8)); */
+
+            --dark-primary-rgb: 0, 209, 178;
+            --dark-primary: rgb(var(--dark-primary-rgb));
+            --dark-info-rgb: 62, 142, 208;
+            --dark-info: rgb(var(--dark-info-rgb));
+            --dark-danger-rgb: 241, 70, 104;
+            --dark-danger: rgb(var(--dark-danger-rgb));
+        }
+
+        html[data-theme="dark"] {
+            color-scheme: dark;
+        }
+
+        html[data-theme="dark"] .button,
+        html[data-theme="dark"] .title,
+        html[data-theme="dark"] .input,
+        html[data-theme="dark"] .select select,
+        html[data-theme="dark"] .textarea,
+        html[data-theme="dark"] .checkbox,
+        html[data-theme="dark"] .tabs,
+        html[data-theme="dark"] .tabs a,
+        html[data-theme="dark"] .panel,
+        html[data-theme="dark"] .panel-block,
+        html[data-theme="dark"] .pagination-ellipsis,
+        html[data-theme="dark"] .pagination-list,
+        html[data-theme="dark"] .pagination-previous,
+        html[data-theme="dark"] .pagination-next,
+        html[data-theme="dark"] .pagination-next,
+        html[data-theme="dark"] .dropdown-content,
+        html[data-theme="dark"] .dropdown-item,
+        html[data-theme="dark"] h1,
+        html[data-theme="dark"] h2,
+        html[data-theme="dark"] h3,
+        html[data-theme="dark"] h4,
+        html[data-theme="dark"] h5,
+        html[data-theme="dark"] h6,
+        html[data-theme="dark"] pre,
+        html[data-theme="dark"] body,
+        html[data-theme="dark"] body,
+        html[data-theme="dark"] {
+            background-color: var(--dark-bg);
+            border-color: var(--dark-border);
+            color: var(--dark-text);
+        }
+
+        html[data-theme="dark"] .dropdown-content,
+        html[data-theme="dark"] .panel {
+            box-shadow: var(--dark-box-shadow);
+        }
+
+        html[data-theme="dark"] .panel-block:not(:last-child),
+        .panel-tabs:not(:last-child) {
+            border-bottom: 1px solid var(--dark-border);
+        }
+
+        html[data-theme="dark"] ::placeholder {
+            color: var(--dark-text-2);
+        }
+
+        html[data-theme="dark"] .button.is-primary,
+        html[data-theme="dark"] .button.is-info,
+        html[data-theme="dark"] .button.is-danger {
+            border-color: transparent;
+        }
+
+        html[data-theme="dark"] .button.is-primary {
+            background-color: var(--dark-primary);
+        }
+
+        html[data-theme="dark"] .button.is-info {
+            background-color: var(--dark-info);
+        }
+
+        html[data-theme="dark"] .button.is-danger {
+            background-color: var(--dark-danger);
+        }
+
+        /*** アプリのスタイル ***/
+
         #songs .song[data-song]::before {
             content: attr(data-song);
         }
@@ -54,6 +169,14 @@
 
         .icon-up::before {
             content: "▲";
+        }
+
+        html .icon-theme::before {
+            content: "🌞";
+        }
+
+        html[data-theme="dark"] .icon-theme::before {
+            content: "🌜";
         }
     </style>
 </head>
@@ -124,7 +247,10 @@
             <div class="buttons mb-1">
                 <button id="copy-button" class="button is-small is-primary">コピー</button>
                 <a id="tweet-button" class="button is-small is-info" href="#">ツイート</a>
-                <button id="clear-button" class="button is-small is-danger is-right">リセット</button>
+                <button id="clear-button" class="button is-small is-danger">リセット</button>
+                <button id="theme-button" class="button is-small is-pulled-right">
+                    <span class="icon is-large icon-theme"></span>
+                </button>
             </div>
         </div>
     </section>
@@ -135,6 +261,7 @@
         const songs = [
             'SE',
             'MC',
+            // MIRAI𖤐FLEET
             '_Rebirth.',
             'わたしはもうきみのじゃない。',
             '囚われカタストロフィー',
@@ -142,6 +269,7 @@
             'MU-ZE',
             'NEVER STAY',
             '\'aimer',
+            // 萌燃ディストラクション
             '彼氏キミ攻略法',
             'すたーとあっぷ☆しぐなる',
             '戦争的可愛症候群',
@@ -150,7 +278,7 @@
             '絶対絶命開示請求',
             '炎上着火ファイヤー',
             'タイムカプセル',
-            // 多分もうやらない曲たち
+            // 葬られたMIRAI𖤐FLEETの曲たち
             'Rebellion',
             'HALU',
         ];
@@ -329,7 +457,24 @@
             const twitterIntentUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(messageTextarea) + '&related=' + encodeURIComponent(relatedAccounts.join(','));
             tweetButton.href = twitterIntentUrl;
         }
+        const THEME_LIGHT = 'light';
+        const THEME_DARK = 'dark';
+        function preferredTheme() {
+            return localStorage.getItem('theme') ? localStorage.getItem('theme') : (window.matchMedia('(prefers-color-scheme: dark)').matches ? THEME_DARK : THEME_LIGHT);
+        }
+        function applyTheme() {
+            const currentTheme = preferredTheme();
+            document.firstElementChild.setAttribute('data-theme', currentTheme);
+        }
+        function switchTheme() {
+            const currentTheme = preferredTheme();
+            if (currentTheme == THEME_DARK || currentTheme == THEME_LIGHT) {
+                localStorage.setItem('theme', currentTheme == THEME_DARK ? THEME_LIGHT : THEME_DARK);
+                applyTheme();
+            }
+        }
         function load() {
+            applyTheme();
             // 入力値を復活
             if (localStorage.getItem('live-title')) {
                 document.getElementById('live-title-input').value = localStorage.getItem('live-title');
@@ -440,6 +585,9 @@
                         dropdownElem.classList.remove('is-active');
                     }
                 };
+            });
+            document.getElementById('theme-button').addEventListener('click', (evt) => {
+                switchTheme();
             });
         }
         document.addEventListener('DOMContentLoaded', load);
