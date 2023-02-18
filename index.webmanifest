@@ -4,34 +4,24 @@
     "display": "fullscreen",
     "icons": [
         {
-            "src": "md_400x400.jpg",
-            "sizes": "400x400",
-            "type": "image/jpeg"
+            "src": "favicon_180x180.png",
+            "sizes": "180x180",
+            "type": "image/png"
         },
         {
-            "src": "kn_400x400.jpg",
-            "sizes": "400x400",
-            "type": "image/jpeg"
+            "src": "favicon_128x128.png",
+            "sizes": "128x128",
+            "type": "image/png"
         },
         {
-            "src": "ma_400x400.jpg",
-            "sizes": "400x400",
-            "type": "image/jpeg"
+            "src": "favicon_64x64.png",
+            "sizes": "64x64",
+            "type": "image/png"
         },
         {
-            "src": "nn_400x400.jpg",
-            "sizes": "400x400",
-            "type": "image/jpeg"
-        },
-        {
-            "src": "kt_400x400.jpg",
-            "sizes": "400x400",
-            "type": "image/jpeg"
-        },
-        {
-            "src": "hr_400x400.jpg",
-            "sizes": "400x400",
-            "type": "image/jpeg"
+            "src": "favicon_32x32.png",
+            "sizes": "32x32",
+            "type": "image/png"
         }
     ],
     "name": "萌ディスセトリ",
