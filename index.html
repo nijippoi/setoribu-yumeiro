@@ -538,9 +538,9 @@
             }
             renderSongs();
             const setlistSongs = document.querySelectorAll('#setlist .song');
-            if (!setlistSongs || setlistSongs.length < 1) {
-                addSong('SE');
-            }
+            // if (!setlistSongs || setlistSongs.length < 1) {
+            //     addSong('SE');
+            // }
             generateMessage();
             // リスナーを追加
             document.getElementById('copy-button').addEventListener('click', (evt) => {
@@ -557,7 +557,7 @@
                 for (const songElem of setlistElem.querySelectorAll('.song')) {
                     setlistElem.removeChild(songElem);
                 }
-                addSong('SE');
+                // addSong('SE');
             });
             document.getElementById('live-place-list-button').addEventListener('click', (evt) => {
                 if (document.getElementById('live-place').classList.contains('is-active')) {
