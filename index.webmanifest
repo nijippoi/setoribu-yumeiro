@@ -1,7 +1,7 @@
 {
-    "name": "萌ディスセトリ部",
-    "short_name": "萌ディスセトリ部",
-    "description": "萌燃𖤐ディストラクションのセトリ部ツイート支援ツール",
+    "name": "夢色セトリ部",
+    "short_name": "夢色セトリ部",
+    "description": "夢色ビジョンのセトリ部のツイート支援ツール",
     "start_url": "index.html",
     "background_color": "#FFFFFF",
     "theme_color": "#3E8ED0",
@@ -34,12 +34,12 @@
             "type": "image/png"
         },
         {
-            "src": "splash_1200x1920.png",
+            "src": "favicon_1200x1920.png",
             "sizes": "1200x1920",
             "type": "image/png"
         },
         {
-            "src": "splash_512x512.png",
+            "src": "favicon_512x512.png",
             "sizes": "512x512",
             "type": "image/png"
         }

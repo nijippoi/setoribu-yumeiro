@@ -10,7 +10,7 @@
     <link rel="apple-touch-icon" href="favicon_180x180.png">
     <link rel="manifest" href="index.webmanifest" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
-    <title>萌ディスセトリ</title>
+    <title>夢色ビジョン セトリ部</title>
 
     <style>
         /*** bulmaの上書き ***/
@@ -227,7 +227,7 @@
                     <div id="live-extratag" class="field dropdown has-addons">
                         <div class="control dropdown-trigger is-expanded has-icons-right">
                             <input id="live-extratag-input" class="input is-small" type="text"
-                                placeholder="セトリ担当・ハッシュタグ" />
+                                placeholder="追加ハッシュタグ" />
                             <a class="icon is-small is-right is-info icon-down" id="live-extratag-list-button"></a>
                         </div>
                         <div class="dropdown-menu" role="menu">
@@ -258,34 +258,28 @@
     </section>
 
     <script>
-        const hashTags = ['萌ディス', '萌燃ディストラクション', '萌ディスセトリ'];
-        const relatedAccounts = ['moe_destruction', 'nana_kumori', 'amina_minase', 'tenn_komiya', 'narua_ngo', 'renpha_hisaki'];
+        const hashTags = ['夢色ビジョン', '夢色セトリ'];
+        const groupAccount = 'yumeiro_tw';
+        const relatedAccounts = ['yumeiro_tw', 'comugi_mfm', 'anna_mfm', 'yurari_mfm', 'mina_mfm', 'mameko_mfm', 'MyFirstMaid'];
         const songs = [
             'SE',
             'MC',
-            // MIRAI𖤐FLEET
-            '_Rebirth.',
-            'わたしはもうきみのじゃない。',
-            '囚われカタストロフィー',
-            'C.A.R',
-            'MU-ZE',
-            'NEVER STAY',
-            '\'aimer',
-            // 萌燃ディストラクション
-            '彼氏キミ攻略法',
-            'すたーとあっぷ☆しぐなる',
-            '戦争的可愛症候群',
-            '世代交代、反逆の狼煙',
-            '☆酒クズファーーック☆',
-            '絶対絶命開示請求',
-            '炎上着火ファイヤー',
-            'タイムカプセル',
-            // 葬られたMIRAI𖤐FLEETの曲たち
-            'Rebellion',
-            'HALU',
+            // 夢色ビジョン
+            '夢色の一歩',
+            'コイワズ',
+            '革新革命フィーリング',
+            '夢色注意報',
+            'サマースプラッシュ',
+            // My First Maid
+            'First Maid はじまりのうた',
+            'Perfect Maid Days',
+            '純情朱淳物語',
+            '全力全開!お給仕★',
+            'First Maid -ありがとうのうた-',
         ];
         const places = [
             // 秋葉原
+            '秋葉原SinfoniA',
             'AKIBA COLORS',
             'TwinBox AKIHABARA',
             'TwinBox GARAGE',
@@ -342,11 +336,7 @@
             '広島CLUB QUATTRO',
         ];
         const extraTags = [
-            'くもりセトリ',
-            'こみやセトリ',
-            'あみなセトリ',
-            'ナルアセトリ',
-            'ふぁーセトリ',
+            '地下アイドル',
         ];
         function songDragStart(evt) {
             // ✖などの内部要素の場合は無視したいので
@@ -453,7 +443,7 @@
             const setlistStr = Array.isArray(setlist) ? setlist.join('\n') : '';
             const customHashTags = document.getElementById('live-extratag-input').value ? hashTags.concat([document.getElementById('live-extratag-input').value]) : hashTags;
             const customHashTagsStr = customHashTags.map(ht => '#' + ht).join('\n');
-            const messageTextarea = `${dateStr ? dateStr + '\n' : ''}${title ? title + '\n' : ''}${place ? '@ ' + place + '\n' : ''}${setlistStr ? '\n' + setlistStr + '\n' : ''}\n@moe_destruction${customHashTagsStr ? '\n' + customHashTagsStr : ''}`;
+            const messageTextarea = `${dateStr ? dateStr + '\n' : ''}${title ? title + '\n' : ''}${place ? '@ ' + place + '\n' : ''}${setlistStr ? '\n' + setlistStr + '\n' : ''}\n@{groupAccount}${customHashTagsStr ? '\n' + customHashTagsStr : ''}`;
             document.getElementById('message-input').value = messageTextarea;
             const tweetButton = document.getElementById('tweet-button');
             const twitterIntentUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(messageTextarea) + '&related=' + encodeURIComponent(relatedAccounts.join(','));
