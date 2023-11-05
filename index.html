@@ -462,7 +462,7 @@
             const setlistStr = Array.isArray(setlist) ? setlist.join('\n') : '';
             const customHashTags = document.getElementById('live-extratag-input').value ? hashTags.concat([document.getElementById('live-extratag-input').value]) : hashTags;
             const customHashTagsStr = customHashTags.map(ht => '#' + ht).join('\n');
-            const messageTextarea = `${dateStr ? dateStr + '\n' : ''}${title ? title + '\n' : ''}${place ? '@ ' + place + '\n' : ''}${setlistStr ? '\n' + setlistStr + '\n' : ''}\n@{groupAccount}${customHashTagsStr ? '\n' + customHashTagsStr : ''}`;
+            const messageTextarea = `${dateStr ? dateStr + '\n' : ''}${title ? title + '\n' : ''}${place ? '@ ' + place + '\n' : ''}${setlistStr ? '\n' + setlistStr + '\n' : ''}\n@${groupAccount}${customHashTagsStr ? '\n' + customHashTagsStr : ''}`;
             document.getElementById('message-input').value = messageTextarea;
             const tweetButton = document.getElementById('tweet-button');
             const twitterIntentUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(messageTextarea) + '&related=' + encodeURIComponent(relatedAccounts.join(','));
