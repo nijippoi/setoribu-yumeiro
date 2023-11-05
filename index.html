@@ -258,8 +258,9 @@
     </section>
 
     <script>
-        const hashTags = ['夢色ビジョン', '夢色セトリ'];
+        const appNamespace = 'yumeiro';
         const groupAccount = 'yumeiro_tw';
+        const hashTags = ['夢色ビジョン', '夢色セトリ'];
         const relatedAccounts = ['yumeiro_tw', 'comugi_mfm', 'anna_mfm', 'yurari_mfm', 'mina_mfm', 'mameko_mfm', 'MyFirstMaid'];
         const songs = [
             'SE',
@@ -338,6 +339,24 @@
         const extraTags = [
             '地下アイドル',
         ];
+        function getStorageItem(key) {
+            if (typeof key === 'string') {
+                return localStorage.getItem(`${appNamespace}::${key}`);
+            }
+            return undefined;
+        }
+        function setStorageItem(key, val) {
+            if (typeof key === 'string') {
+                return localStorage.setItem(`${appNamespace}::${key}`, val);
+            }
+            return undefined;
+        }
+        function removeStorageItem(key) {
+            if (typeof key === 'string') {
+                return localStorage.removeItem(`${appNamespace}::${key}`);
+            }
+            return undefined;
+        }
         function songDragStart(evt) {
             // ✖などの内部要素の場合は無視したいので
             if (evt.srcElement.classList.contains('song')) {
@@ -425,10 +444,10 @@
         }
         function generateMessage() {
             // 入力値を保存
-            document.getElementById('live-title-input').value ? localStorage.setItem('live-title', document.getElementById('live-title-input').value) : localStorage.removeItem('live-title');
-            document.getElementById('live-place-input').value ? localStorage.setItem('live-place', document.getElementById('live-place-input').value) : localStorage.removeItem('live-place');
-            document.getElementById('live-extratag-input').value ? localStorage.setItem('live-extratag', document.getElementById('live-extratag-input').value) : localStorage.removeItem('live-extratag');
-            document.getElementById('live-date-input').value ? localStorage.setItem('live-date', document.getElementById('live-date-input').value) : localStorage.removeItem('live-date');
+            document.getElementById('live-title-input').value ? setStorageItem('live-title', document.getElementById('live-title-input').value) : removeStorageItem('live-title');
+            document.getElementById('live-place-input').value ? setStorageItem('live-place', document.getElementById('live-place-input').value) : removeStorageItem('live-place');
+            document.getElementById('live-extratag-input').value ? setStorageItem('live-extratag', document.getElementById('live-extratag-input').value) : removeStorageItem('live-extratag');
+            document.getElementById('live-date-input').value ? setStorageItem('live-date', document.getElementById('live-date-input').value) : removeStorageItem('live-date');
             // メッセージを生成
             const title = document.getElementById('live-title-input').value;
             const place = document.getElementById('live-place-input').value;
@@ -439,7 +458,7 @@
                     setlist.push(elem.dataset.song);
                 }
             }
-            setlist && setlist.length > 0 ? localStorage.setItem('setlist', JSON.stringify(setlist)) : localStorage.removeItem('setlist');
+            setlist && setlist.length > 0 ? setStorageItem('setlist', JSON.stringify(setlist)) : removeStorageItem('setlist');
             const setlistStr = Array.isArray(setlist) ? setlist.join('\n') : '';
             const customHashTags = document.getElementById('live-extratag-input').value ? hashTags.concat([document.getElementById('live-extratag-input').value]) : hashTags;
             const customHashTagsStr = customHashTags.map(ht => '#' + ht).join('\n');
@@ -452,7 +471,7 @@
         const THEME_LIGHT = 'light';
         const THEME_DARK = 'dark';
         function preferredTheme() {
-            return localStorage.getItem('theme') ? localStorage.getItem('theme') : (window.matchMedia('(prefers-color-scheme: dark)').matches ? THEME_DARK : THEME_LIGHT);
+            return getStorageItem('theme') ? getStorageItem('theme') : (window.matchMedia('(prefers-color-scheme: dark)').matches ? THEME_DARK : THEME_LIGHT);
         }
         function applyTheme() {
             const currentTheme = preferredTheme();
@@ -461,27 +480,27 @@
         function switchTheme() {
             const currentTheme = preferredTheme();
             if (currentTheme == THEME_DARK || currentTheme == THEME_LIGHT) {
-                localStorage.setItem('theme', currentTheme == THEME_DARK ? THEME_LIGHT : THEME_DARK);
+                setStorageItem('theme', currentTheme == THEME_DARK ? THEME_LIGHT : THEME_DARK);
                 applyTheme();
             }
         }
         function load() {
             applyTheme();
             // 入力値を復活
-            if (localStorage.getItem('live-title')) {
-                document.getElementById('live-title-input').value = localStorage.getItem('live-title');
+            if (getStorageItem('live-title')) {
+                document.getElementById('live-title-input').value = getStorageItem('live-title');
             }
-            if (localStorage.getItem('live-place')) {
-                document.getElementById('live-place-input').value = localStorage.getItem('live-place');
+            if (getStorageItem('live-place')) {
+                document.getElementById('live-place-input').value = getStorageItem('live-place');
             }
-            if (localStorage.getItem('live-date')) {
-                document.getElementById('live-date-input').value = localStorage.getItem('live-date');
+            if (getStorageItem('live-date')) {
+                document.getElementById('live-date-input').value = getStorageItem('live-date');
             }
-            if (localStorage.getItem('live-extratag')) {
-                document.getElementById('live-extratag-input').value = localStorage.getItem('live-extratag');
+            if (getStorageItem('live-extratag')) {
+                document.getElementById('live-extratag-input').value = getStorageItem('live-extratag');
             }
-            if (localStorage.getItem('setlist')) {
-                const setlist = JSON.parse(localStorage.getItem('setlist'));
+            if (getStorageItem('setlist')) {
+                const setlist = JSON.parse(getStorageItem('setlist'));
                 for (const song of setlist) {
                     addSong(song);
                 }
