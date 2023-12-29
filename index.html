@@ -358,6 +358,9 @@
             }
             return undefined;
         }
+        function _(id) {
+            return document.getElementById(id);
+        }
         function songDragStart(evt) {
             // ✖などの内部要素の場合は無視したいので
             if (evt.srcElement.classList.contains('song')) {
@@ -421,7 +424,7 @@
             setlistSongElem.addEventListener('mousedown', songDragStart);
             setlistSongElem.addEventListener('touchstart', songDragStart);
             // セットリストを作成
-            const setlistElem = document.getElementById('setlist');
+            const setlistElem = _('setlist');
             // <a class="panel-block setlist is-size-7" data-song="曲名">
             //     <span class="panel-icon song-move-up"></span>
             //     <span class="panel-icon song-move-down"></span>
@@ -431,7 +434,7 @@
             generateMessage();
         }
         function renderSongs() {
-            const songsElem = document.getElementById('songs');
+            const songsElem = _('songs');
             for (const song of songs) {
                 // <a class="panel-block song is-size-7" data-song="曲名"></a>
                 const songElem = document.createElement('a');
@@ -445,14 +448,14 @@
         }
         function generateMessage() {
             // 入力値を保存
-            document.getElementById('live-title-input').value ? setStorageItem('live-title', document.getElementById('live-title-input').value) : removeStorageItem('live-title');
-            document.getElementById('live-place-input').value ? setStorageItem('live-place', document.getElementById('live-place-input').value) : removeStorageItem('live-place');
-            document.getElementById('live-extratag-input').value ? setStorageItem('live-extratag', document.getElementById('live-extratag-input').value) : removeStorageItem('live-extratag');
-            document.getElementById('live-date-input').value ? setStorageItem('live-date', document.getElementById('live-date-input').value) : removeStorageItem('live-date');
+            _('live-title-input').value ? setStorageItem('live-title', _('live-title-input').value) : removeStorageItem('live-title');
+            _('live-place-input').value ? setStorageItem('live-place', _('live-place-input').value) : removeStorageItem('live-place');
+            _('live-extratag-input').value ? setStorageItem('live-extratag', _('live-extratag-input').value) : removeStorageItem('live-extratag');
+            _('live-date-input').value ? setStorageItem('live-date', _('live-date-input').value) : removeStorageItem('live-date');
             // メッセージを生成
-            const title = document.getElementById('live-title-input').value;
-            const place = document.getElementById('live-place-input').value;
-            const dateStr = document.getElementById('live-date-input').value ? new Intl.DateTimeFormat('ja-JP').format(document.getElementById('live-date-input').valueAsDate) : '';
+            const title = _('live-title-input').value;
+            const place = _('live-place-input').value;
+            const dateStr = _('live-date-input').value ? new Intl.DateTimeFormat('ja-JP').format(_('live-date-input').valueAsDate) : '';
             const setlist = [];
             for (const elem of document.querySelectorAll('#setlist .song')) {
                 if (elem.dataset.song) {
@@ -461,11 +464,11 @@
             }
             setlist && setlist.length > 0 ? setStorageItem('setlist', JSON.stringify(setlist)) : removeStorageItem('setlist');
             const setlistStr = Array.isArray(setlist) ? setlist.join('\n') : '';
-            const customHashTags = document.getElementById('live-extratag-input').value ? hashTags.concat([document.getElementById('live-extratag-input').value]) : hashTags;
+            const customHashTags = _('live-extratag-input').value ? hashTags.concat([_('live-extratag-input').value]) : hashTags;
             const customHashTagsStr = customHashTags.map(ht => '#' + ht).join('\n');
             const messageTextarea = `${dateStr ? dateStr + '\n' : ''}${title ? title + '\n' : ''}${place ? '@ ' + place + '\n' : ''}${setlistStr ? '\n' + setlistStr + '\n' : ''}\n@${groupAccount}${customHashTagsStr ? '\n' + customHashTagsStr : ''}`;
-            document.getElementById('message-input').value = messageTextarea;
-            const tweetButton = document.getElementById('tweet-button');
+            _('message-input').value = messageTextarea;
+            const tweetButton = _('tweet-button');
             const twitterIntentUrl = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(messageTextarea) + '&related=' + encodeURIComponent(relatedAccounts.join(','));
             tweetButton.href = twitterIntentUrl;
         }
@@ -489,16 +492,16 @@
             applyTheme();
             // 入力値を復活
             if (getStorageItem('live-title')) {
-                document.getElementById('live-title-input').value = getStorageItem('live-title');
+                _('live-title-input').value = getStorageItem('live-title');
             }
             if (getStorageItem('live-place')) {
-                document.getElementById('live-place-input').value = getStorageItem('live-place');
+                _('live-place-input').value = getStorageItem('live-place');
             }
             if (getStorageItem('live-date')) {
-                document.getElementById('live-date-input').value = getStorageItem('live-date');
+                _('live-date-input').value = getStorageItem('live-date');
             }
             if (getStorageItem('live-extratag')) {
-                document.getElementById('live-extratag-input').value = getStorageItem('live-extratag');
+                _('live-extratag-input').value = getStorageItem('live-extratag');
             }
             if (getStorageItem('setlist')) {
                 const setlist = JSON.parse(getStorageItem('setlist'));
@@ -507,10 +510,10 @@
                 }
             }
             // 初期化
-            if (!document.getElementById('live-date-input').value) {
-                document.getElementById('live-date-input').valueAsDate = new Date();
+            if (!_('live-date-input').value) {
+                _('live-date-input').valueAsDate = new Date();
             }
-            const placeListElem = document.getElementById('live-place-list');
+            const placeListElem = _('live-place-list');
             for (const place of places) {
                 // <a href="#" class="dropdown-item is-small">AKIBA COLORS</a>
                 const placeItem = document.createElement('a');
@@ -518,21 +521,21 @@
                 placeItem.dataset.place = place;
                 placeItem.textContent = place;
                 placeItem.addEventListener('click', (evt) => {
-                    document.getElementById('live-place-input').value = evt.srcElement.dataset.place;
-                    document.getElementById('live-place').classList.remove('is-active');
+                    _('live-place-input').value = evt.srcElement.dataset.place;
+                    _('live-place').classList.remove('is-active');
                     generateMessage();
                 });
                 placeListElem.appendChild(placeItem);
             }
-            const extraTagListItem = document.getElementById('live-extratag-list');
+            const extraTagListItem = _('live-extratag-list');
             for (const extraTag of extraTags) {
                 const extraTagItem = document.createElement('a');
                 extraTagItem.classList.add('dropdown-item', 'is-small');
                 extraTagItem.dataset.extraTag = extraTag;
                 extraTagItem.textContent = extraTag;
                 extraTagItem.addEventListener('click', (evt) => {
-                    document.getElementById('live-extratag-input').value = evt.srcElement.dataset.extraTag;
-                    document.getElementById('live-extratag').classList.remove('is-active');
+                    _('live-extratag-input').value = evt.srcElement.dataset.extraTag;
+                    _('live-extratag').classList.remove('is-active');
                     generateMessage();
                 });
                 extraTagListItem.appendChild(extraTagItem);
@@ -544,41 +547,41 @@
             // }
             generateMessage();
             // リスナーを追加
-            document.getElementById('copy-button').addEventListener('click', (evt) => {
+            _('copy-button').addEventListener('click', (evt) => {
                 document.querySelector('#message .textarea').select();
                 document.execCommand('copy');
                 window.alert('クリップボードにコピーしました');
             });
-            document.getElementById('clear-button').addEventListener('click', (evt) => {
-                document.getElementById('live-title-input').value = null;
-                document.getElementById('live-place-input').value = null;
-                document.getElementById('live-extratag-input').value = null;
-                document.getElementById('live-date-input').valueAsDate = new Date();
-                const setlistElem = document.getElementById('setlist');
+            _('clear-button').addEventListener('click', (evt) => {
+                _('live-title-input').value = null;
+                _('live-place-input').value = null;
+                _('live-extratag-input').value = null;
+                _('live-date-input').valueAsDate = new Date();
+                const setlistElem = _('setlist');
                 for (const songElem of setlistElem.querySelectorAll('.song')) {
                     setlistElem.removeChild(songElem);
                 }
                 // addSong('SE');
                 generateMessage();
             });
-            document.getElementById('live-place-list-button').addEventListener('click', (evt) => {
-                if (document.getElementById('live-place').classList.contains('is-active')) {
-                    document.getElementById('live-place').classList.remove('is-active');
+            _('live-place-list-button').addEventListener('click', (evt) => {
+                if (_('live-place').classList.contains('is-active')) {
+                    _('live-place').classList.remove('is-active');
                 } else {
-                    document.getElementById('live-place').classList.add('is-active');
-                    document.getElementById('live-place-input').focus();
+                    _('live-place').classList.add('is-active');
+                    _('live-place-input').focus();
                 }
             });
-            document.getElementById('live-extratag-list-button').addEventListener('click', (evt) => {
-                if (document.getElementById('live-extratag').classList.contains('is-active')) {
-                    document.getElementById('live-extratag').classList.remove('is-active');
+            _('live-extratag-list-button').addEventListener('click', (evt) => {
+                if (_('live-extratag').classList.contains('is-active')) {
+                    _('live-extratag').classList.remove('is-active');
                 } else {
-                    document.getElementById('live-extratag').classList.add('is-active');
-                    document.getElementById('live-extratag-input').focus();
+                    _('live-extratag').classList.add('is-active');
+                    _('live-extratag-input').focus();
                 }
             });
-            document.getElementById('custom-song-add').addEventListener('click', (evt) => {
-                const customSongElem = document.getElementById('custom-song-input');
+            _('custom-song-add').addEventListener('click', (evt) => {
+                const customSongElem = _('custom-song-input');
                 if (customSongElem.value) {
                     addSong(customSongElem.value);
                     customSongElem.value = null;
@@ -599,7 +602,7 @@
                     }
                 };
             });
-            document.getElementById('theme-button').addEventListener('click', (evt) => {
+            _('theme-button').addEventListener('click', (evt) => {
                 switchTheme();
             });
         }
